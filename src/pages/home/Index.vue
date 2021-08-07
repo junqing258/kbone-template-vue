@@ -1,10 +1,3 @@
-<!--
- * @Author: junqing.zhang
- * @Date: 2021-08-07 11:31:31
- * @LastEditors: junqing.zhang
- * @LastEditTime: 2021-08-07 17:16:29
- * @Description: 
--->
 <template>
   <div class="cnt">
     <Header></Header>
@@ -34,11 +27,11 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import Header from '@/common/Header.vue'
-import Footer from '@/common/Footer.vue'
-import Web from 'reduce-loader!@/common/Web.vue'
-import 'reduce-loader!./web'
+import Vue from 'vue';
+import Header from '@/common/Header.vue';
+import Footer from '@/common/Footer.vue';
+import Web from 'reduce-loader!@/common/Web.vue';
+import 'reduce-loader!./web';
 
 export default Vue.extend({
   name: 'Home',
@@ -48,33 +41,36 @@ export default Vue.extend({
     Web,
   },
   created() {
-    window.addEventListener('wxload', query => console.log('page1 wxload', query))
-    window.addEventListener('wxshow', () => console.log('page1 wxshow'))
-    window.addEventListener('wxready', () => console.log('page1 wxready'))
-    window.addEventListener('wxhide', () => console.log('page1 wxhide'))
-    window.addEventListener('wxunload', () => console.log('page1 wxunload'))
+    window.addEventListener('wxload', (query) => console.log('page1 wxload', query));
+    window.addEventListener('wxshow', () => console.log('page1 wxshow'));
+    window.addEventListener('wxready', () => console.log('page1 wxready'));
+    window.addEventListener('wxhide', () => console.log('page1 wxhide'));
+    window.addEventListener('wxunload', () => console.log('page1 wxunload'));
 
     if (process.env.isMiniprogram) {
-      console.log('I am in miniprogram')
+      console.log('I am in miniprogram');
     } else {
-      console.log('I am in Web')
+      console.log('I am in Web');
     }
+  },
+  beforeDestroy() {
+    console.log('home destroyed');
   },
   methods: {
     onClickJump() {
-      window.location.href = '/test/list/123'
+      window.location.href = '/test/list/123';
     },
 
     onClickOpen() {
-      window.open('/test/detail/123')
+      window.open('/test/detail/123');
     },
   },
-})
+});
 </script>
 
 <style lang="less">
-
-a, button {
+a,
+button {
   display: block;
   width: 100%;
   height: 30px;

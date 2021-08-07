@@ -2,7 +2,7 @@
  * @Author: junqing.zhang
  * @Date: 2021-08-07 11:31:31
  * @LastEditors: junqing.zhang
- * @LastEditTime: 2021-08-07 17:29:55
+ * @LastEditTime: 2021-08-07 18:09:34
  * @Description: 
  */
 /**
@@ -16,7 +16,6 @@ module.exports = {
         home: [
             '/(home|index)?',
             '/index.html',
-            '/test/(home|index)',
         ],
         list: [
             '/list/:id',
@@ -31,9 +30,7 @@ module.exports = {
         autoBuildNpm: 'npm',
     },
     app: {
-        backgroundTextStyle: 'dark',
-        navigationBarTextStyle: 'white',
-        navigationBarTitleText: 'kbone',
+        navigationBarTitleText: '同程用车',
     },
 	appExtraConfig: {
         sitemapLocation: 'sitemap.json',

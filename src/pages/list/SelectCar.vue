@@ -1,10 +1,3 @@
-<!--
- * @Author: junqing.zhang
- * @Date: 2021-08-07 14:51:04
- * @LastEditors: junqing.zhang
- * @LastEditTime: 2021-08-07 17:42:20
- * @Description: 
--->
 <template>
   <div
     class="select-car"
@@ -16,7 +9,7 @@
     <div class="select-header"></div>
     <div class="scroll-list" ref="scrollListRef">
       <div class="scroll-content">
-        <div class="product-item" v-for="(item, index) in products">
+        <div class="product-item" v-for="(item, index) in products" :key="item">
           {{ index }}
         </div>
       </div>
@@ -26,10 +19,12 @@
 </template>
 
 <script>
-export default {
-  name: "SelectCar",
+// import Vue from 'vue';
+
+export default Vue.extend({
+  name: 'SelectCar',
   data: () => ({
-    posCodes: ["high", "middle", "low"],
+    posCodes: ['high', 'middle', 'low'],
     posIndex: 1,
     products: new Array(50).fill(0),
   }),
@@ -41,14 +36,13 @@ export default {
       this.startX = e.touches[0].pageX;
       this.startY = e.touches[0].pageY;
       this.startTarget = e.target;
-      console.log("touchStart", this.startY);
     },
     touchMove(e) {
       const moveX = e.changedTouches[0].pageX;
       const moveY = e.changedTouches[0].pageY;
       const offsetY = moveY - this.startY;
       if (this.posIndex === 2) {
-        e.preventDefault();
+        e.stopPropagation();
       }
     },
     touchEnd(e) {
@@ -59,24 +53,22 @@ export default {
 
       const scrollListEle = this.$refs.scrollListRef;
 
-      const isInScroll =
-        scrollListEle.contains(this.startTarget) &&
-        scrollListEle.contains(this.endTarget);
+      const isInScroll = scrollListEle.contains(this.startTarget) && scrollListEle.contains(this.endTarget);
       const isUp = offsetY < 0;
       const isDown = offsetY > 0;
 
       if (isInScroll) {
-        if (isUp && !this.isScrollToBottom(scrollListEle)) return
-        if (isDown && !this.isScrollToTop(scrollListEle)) return
+        if (isUp && !this.isScrollToBottom(scrollListEle)) return;
+        if (isDown && !this.isScrollToTop(scrollListEle)) return;
       }
 
       if (Math.abs(offsetY) <= 5) return;
 
       if (isDown && this.posIndex < this.posCodes.length - 1) {
-        e.preventDefault();
+        e.stopPropagation();
         this.posIndex = this.posIndex + 1;
       } else if (isUp && this.posIndex > 0) {
-        e.preventDefault();
+        e.stopPropagation();
         this.posIndex = this.posIndex - 1;
       }
     },
@@ -85,12 +77,11 @@ export default {
       return d;
     },
     isScrollToBottom(dom) {
-      const d =
-        parseInt(dom.scrollHeight - dom.scrollTop - dom.clientHeight) <= 1;
+      const d = parseInt(dom.scrollHeight - dom.scrollTop - dom.clientHeight) <= 1;
       return d;
     },
   },
-};
+});
 </script>
 
 <style lang="less">

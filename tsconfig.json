@@ -9,20 +9,14 @@
     "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata":true,
+    "emitDecoratorMetadata": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "paths": {
-      "*": [
-        "node_modules/*",
-        "src/**/@types/*"
-      ],
+      "*": ["node_modules/*"],
+      "@/*": ["src/*"]
     }
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "./node_modules/*"
-  ]
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }

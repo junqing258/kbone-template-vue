@@ -5,26 +5,26 @@
  * @LastEditTime: 2021-08-07 17:22:19
  * @Description:
  */
-import Vue from "vue";
-import Router from "vue-router";
-import App from "@/App.vue";
-import store from "@/store";
-import Home from "@/pages/home/Index.vue";
-import List from "@/pages/list/Index.vue";
+import Vue from 'vue';
+import Router from 'vue-router';
+import App from '@/App.vue';
+import store from '@/store';
+import Home from '@/pages/home/Index.vue';
+import List from '@/pages/list/Index.vue';
 
 Vue.use(Router);
 
 const router = new Router({
-  mode: "history",
+  mode: 'history',
   routes: [
     {
-      path: "/(home|index)?",
-      name: "Home",
+      path: '/(home|index)?',
+      name: 'Home',
       component: Home,
     },
     {
-      path: "/index.html",
-      name: "HomeHtml",
+      path: '/index.html',
+      name: 'HomeHtml',
       component: Home,
     },
     // {
@@ -36,14 +36,14 @@ const router = new Router({
 });
 
 export default function createApp() {
-  const container = document.createElement("div");
-  container.id = "app";
+  const container = document.createElement('div');
+  container.id = 'app';
   document.body.appendChild(container);
 
   Vue.config.productionTip = false;
 
   return new Vue({
-    el: "#app",
+    el: '#app',
     router,
     store,
     render: (h) => h(App),

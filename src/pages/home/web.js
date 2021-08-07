@@ -1,1 +1,1 @@
-console.log('this is web.js')
+console.log('this is web.js');

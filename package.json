@@ -11,10 +11,22 @@
   "scripts": {
     "start": "npm run mp",
     "web": "cross-env NODE_ENV=development webpack-dev-server --inline --progress --config build/webpack.dev.config.js",
-    "mp": "rimraf dist/mp/common && cross-env NODE_ENV=development webpack --config build/webpack.mp.config.js --progress --hide-modules",
-    "lint": "eslint --ext .js,.vue src --fix",
-    "build": "rimraf dist/web && cross-env NODE_ENV=production webpack --config build/webpack.prod.config.js --progress --hide-modules",
-    "build:mp": "rimraf dist/mp/common && cross-env NODE_ENV=production webpack --config build/webpack.mp.config.js --progress --hide-modules"
+    "mp": "rimraf dist/mp/common && cross-env NODE_ENV=development webpack --config build/webpack.mp.config.js --progress",
+    "lint": "eslint --cache \"src/**/*.{js,ts,vue}\"",
+    "lint:fix": "eslint --cache --fix \"src/**/*.{js,ts,vue}\"",
+    "build": "rimraf dist/web && cross-env NODE_ENV=production webpack --config build/webpack.prod.config.js --progress",
+    "build:mp": "rimraf dist/mp/common && cross-env NODE_ENV=production webpack --config build/webpack.mp.config.js --progress"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.(js|jsx|vue)": "npm run lint:fix",
+    "*.(json|yml|yaml|css|less|scss)": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@vue/composition-api": "^1.0.5",
@@ -23,6 +35,8 @@
     "vuex": "^3.4.0"
   },
   "devDependencies": {
+    "@typescript-eslint/parser": "^4.29.0",
+    "@vue/eslint-config-prettier": "^6.0.0",
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
     "babel-eslint": "^8.2.1",
@@ -40,14 +54,17 @@
     "cssnano": "^4.1.10",
     "eslint": "^4.15.0",
     "eslint-config-airbnb-base": "^11.3.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-friendly-formatter": "^3.0.0",
     "eslint-import-resolver-webpack": "^0.8.3",
     "eslint-loader": "^3.0.3",
     "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-vue": "^4.0.0",
     "file-loader": "^1.1.4",
     "friendly-errors-webpack-plugin": "^1.6.1",
     "html-webpack-plugin": "^3.2.0",
+    "husky": "^7.0.1",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
     "mini-css-extract-plugin": "^0.5.0",
@@ -55,6 +72,7 @@
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "portfinder": "^1.0.25",
     "postcss-loader": "^2.0.8",
+    "prettier": "^2.3.2",
     "reduce-loader": "^0.3.1",
     "rimraf": "^2.7.1",
     "terser-webpack-plugin": "^2.3.0",
