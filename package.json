@@ -15,15 +15,11 @@
     "lint": "eslint --cache \"src/**/*.{js,ts,vue}\"",
     "lint:fix": "eslint --cache --fix \"src/**/*.{js,ts,vue}\"",
     "build": "rimraf dist/web && cross-env NODE_ENV=production webpack --config build/webpack.prod.config.js --progress",
-    "build:mp": "rimraf dist/mp/common && cross-env NODE_ENV=production webpack --config build/webpack.mp.config.js --progress"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+    "build:mp": "rimraf dist/mp/common && cross-env NODE_ENV=production webpack --config build/webpack.mp.config.js --progress",
+    "precommit": "lint-staged"
   },
   "lint-staged": {
-    "*.(js|jsx|vue)": "npm run lint:fix",
+    "src/**/*.(js|jsx|vue)": "npm run lint:fix",
     "*.(json|yml|yaml|css|less|scss)": [
       "prettier --write"
     ]
