@@ -1,6 +1,6 @@
 <template>
   <div class="cnt">
-    <!-- <Header></Header> -->
+    <Header></Header>
     <!-- <a href="/home">回到首页</a> -->
     <!-- <button @click="onClickJump">回到首页</button> -->
     <div class="map"></div>
