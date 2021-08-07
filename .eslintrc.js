@@ -3,7 +3,7 @@
 module.exports = {
   root: true,
   parserOptions: {
-    parser: "@typescript-eslint/parser"
+    parser: 'babel-eslint',
   },
   env: {
     browser: true,

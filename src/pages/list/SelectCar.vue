@@ -38,9 +38,9 @@ export default Vue.extend({
       this.startTarget = e.target;
     },
     touchMove(e) {
-      const moveX = e.changedTouches[0].pageX;
-      const moveY = e.changedTouches[0].pageY;
-      const offsetY = moveY - this.startY;
+      // const moveX = e.changedTouches[0].pageX;
+      // const moveY = e.changedTouches[0].pageY;
+      // const offsetY = moveY - this.startY;
       if (this.posIndex === 2) {
         e.stopPropagation();
       }

@@ -16,9 +16,8 @@ const isOptimize = false; // 是否压缩业务代码，开发者工具可能无
 module.exports = {
   mode: "production",
   entry: {
-    // js 入口
-    home: path.resolve(__dirname, "../src/mp/home/main.mp.js"),
-    list: path.resolve(__dirname, "../src/mp/list/main.mp.js"),
+    home: path.resolve(__dirname, "../src/mp/home.mp.js"),
+    list: path.resolve(__dirname, "../src/mp/list.mp.js"),
   },
   output: {
     path: path.resolve(__dirname, "../dist/mp/common"), // 放到小程序代码目录中的 common 目录下
