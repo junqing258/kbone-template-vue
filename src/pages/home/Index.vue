@@ -54,7 +54,7 @@ export default Vue.extend({
     }
   },
   beforeDestroy() {
-    console.log('home destroyed');
+    console.log('home destroy');
   },
   methods: {
     onClickJump() {
