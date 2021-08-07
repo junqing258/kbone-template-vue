@@ -2,15 +2,15 @@
  * @Author: junqing.zhang
  * @Date: 2021-08-07 11:31:31
  * @LastEditors: junqing.zhang
- * @LastEditTime: 2021-08-07 17:22:19
+ * @LastEditTime: 2021-08-07 17:24:59
  * @Description:
  */
 import Vue from "vue";
 import Router from "vue-router";
 import App from "@/App.vue";
 import store from "@/store";
-import Home from "@/pages/home/Index.vue";
 import List from "@/pages/list/Index.vue";
+import Detail from "@/pages/detail/Index.vue";
 
 Vue.use(Router);
 
@@ -18,20 +18,15 @@ const router = new Router({
   mode: "history",
   routes: [
     {
-      path: "/(home|index)?",
-      name: "Home",
-      component: Home,
+      path: "/list/:id",
+      name: "List",
+      component: List,
     },
     {
-      path: "/index.html",
-      name: "HomeHtml",
-      component: Home,
+      path: "/detail/:id",
+      name: "Detail",
+      component: Detail,
     },
-    // {
-    //   path: "/list",
-    //   name: "List",
-    //   component: List,
-    // },
   ],
 });
 

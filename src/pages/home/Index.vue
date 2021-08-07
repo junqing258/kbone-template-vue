@@ -1,11 +1,18 @@
+<!--
+ * @Author: junqing.zhang
+ * @Date: 2021-08-07 11:31:31
+ * @LastEditors: junqing.zhang
+ * @LastEditTime: 2021-08-07 17:16:29
+ * @Description: 
+-->
 <template>
   <div class="cnt">
     <Header></Header>
     <div>
-      <a href="/test/list/321">当前页跳转</a>
-      <a href="/test/detail/123" target="_blank">新开页面跳转</a>
-      <button @click="onClickJump">当前页跳转</button>
-      <button @click="onClickOpen">新开页面跳转</button>
+      <a href="/list/321">开始选车</a>
+      <!-- <a href="/detail/123" target="_blank">新开页面跳转</a> -->
+      <!-- <button @click="onClickJump">当前页跳转</button>
+      <button @click="onClickOpen">新开页面跳转</button> -->
     </div>
     <!-- vue-improve-loader -->
     <div check-reduce>
@@ -28,9 +35,9 @@
 
 <script>
 import Vue from 'vue'
-import Header from '../common/Header.vue'
-import Footer from '../common/Footer.vue'
-import Web from 'reduce-loader!../common/Web.vue'
+import Header from '@/common/Header.vue'
+import Footer from '@/common/Footer.vue'
+import Web from 'reduce-loader!@/common/Web.vue'
 import 'reduce-loader!./web'
 
 export default Vue.extend({
@@ -66,9 +73,6 @@ export default Vue.extend({
 </script>
 
 <style lang="less">
-.cnt {
-  margin-top: 20px;
-}
 
 a, button {
   display: block;

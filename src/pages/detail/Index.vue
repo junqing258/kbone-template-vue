@@ -1,3 +1,10 @@
+<!--
+ * @Author: junqing.zhang
+ * @Date: 2021-08-07 11:31:31
+ * @LastEditors: junqing.zhang
+ * @LastEditTime: 2021-08-07 14:44:37
+ * @Description: 
+-->
 <template>
   <div class="cnt">
     <Header></Header>
@@ -8,8 +15,8 @@
 
 <script>
 import Vue from 'vue'
-import Header from '../common/Header.vue'
-import Footer from '../common/Footer.vue'
+import Header from '@/common/Header.vue'
+import Footer from '@/common/Footer.vue'
 
 export default Vue.extend({
   name: 'Detail',

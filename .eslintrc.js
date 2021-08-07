@@ -1,3 +1,10 @@
+/*
+ * @Author: junqing.zhang
+ * @Date: 2021-08-07 11:31:31
+ * @LastEditors: junqing.zhang
+ * @LastEditTime: 2021-08-07 15:12:28
+ * @Description: 
+ */
 // https://eslint.org/docs/user-guide/configuring
 
 module.exports = {
@@ -46,6 +53,7 @@ module.exports = {
       'error',
       'never'
     ],
+    quotes: ["error", "never"],
     'no-new': 'off',
     'comma-dangle': [
       'error',
@@ -54,6 +62,7 @@ module.exports = {
     'import/no-webpack-loader-syntax': 'off',
     'import/first': 'off',
     'linebreak-style': ['off', 'windows'],
+    'no-trailing-spaces': 0,
   },
   'globals': {
     'window': true,

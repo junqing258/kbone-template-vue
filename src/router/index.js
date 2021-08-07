@@ -1,9 +1,17 @@
+/* eslint-disable no-trailing-spaces */
+/*
+ * @Author: junqing.zhang
+ * @Date: 2021-08-07 11:31:31
+ * @LastEditors: junqing.zhang
+ * @LastEditTime: 2021-08-07 14:47:10
+ * @Description: 
+ */
 import Vue from 'vue'
 import Router from 'vue-router'
 
-const Home = () => import(/* webpackChunkName: "Home" */'@/home/Index.vue')
-const List = () => import(/* webpackChunkName: "List" */'@/list/Index.vue')
-const Detail = () => import(/* webpackChunkName: "Detail" */'@/detail/Index.vue')
+const Home = () => import(/* webpackChunkName: "Home" */'@/pages/home/Index.vue')
+const List = () => import(/* webpackChunkName: "List" */'@/pages/list/Index.vue')
+const Detail = () => import(/* webpackChunkName: "Detail" */'@/pages/detail/Index.vue')
 
 Vue.use(Router)
 
@@ -14,19 +22,11 @@ export default new Router({
     name: 'Home',
     component: Home,
   }, {
-    path: '/index.html',
-    name: 'HomeHtml',
-    component: Home,
-  }, {
-    path: '/test/(home|index)',
-    name: 'HomeTest',
-    component: Home,
-  }, {
-    path: '/test/list/:id',
+    path: '/list/:id',
     name: 'List',
     component: List,
   }, {
-    path: '/test/detail/:id',
+    path: '/detail/:id',
     name: 'Detail',
     component: Detail,
   }],

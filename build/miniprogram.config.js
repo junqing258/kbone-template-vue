@@ -1,3 +1,10 @@
+/*
+ * @Author: junqing.zhang
+ * @Date: 2021-08-07 11:31:31
+ * @LastEditors: junqing.zhang
+ * @LastEditTime: 2021-08-07 17:29:55
+ * @Description: 
+ */
 /**
  * 配置参考：https://wechat-miniprogram.github.io/kbone/docs/config/
  */
@@ -11,9 +18,9 @@ module.exports = {
             '/index.html',
             '/test/(home|index)',
         ],
-        other: [
-            '/test/list/:id',
-            '/test/detail/:id',
+        list: [
+            '/list/:id',
+            '/detail/:id',
         ],
     },
     redirect: {
@@ -50,6 +57,6 @@ module.exports = {
 	},
     projectConfig: {
         projectname: 'kbone-template-vue',
-        appid: '',
+        appid: 'wx101a3416317f9eb3',
     },
 }

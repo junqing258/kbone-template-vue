@@ -1,56 +1,68 @@
-const webpack = require('webpack')
-const merge = require('webpack-merge')
-const baseWebpackConfig = require('./webpack.base.config')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
-const portfinder = require('portfinder')
-const autoprefixer = require('autoprefixer')
-const {VueLoaderPlugin} = require('vue-loader')
+/*
+ * @Author: junqing.zhang
+ * @Date: 2021-08-07 11:31:31
+ * @LastEditors: junqing.zhang
+ * @LastEditTime: 2021-08-07 17:43:25
+ * @Description: 
+ */
+const webpack = require("webpack");
+const merge = require("webpack-merge");
+const baseWebpackConfig = require("./webpack.base.config");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin");
+const portfinder = require("portfinder");
+const autoprefixer = require("autoprefixer");
+const { VueLoaderPlugin } = require("vue-loader");
 
 const devWebpackConfig = merge(baseWebpackConfig, {
-  mode: 'development',
+  mode: "development",
   devServer: {
-    clientLogLevel: 'warning',
+    clientLogLevel: "warning",
     historyApiFallback: {
-      rewrites: [{from: /.*/, to: '/index.html'}],
+      rewrites: [{ from: /.*/, to: "/index.html" }],
     },
     hot: true,
     contentBase: false,
     compress: true,
-    host: process.env.HOST || 'localhost',
+    host: process.env.HOST || "localhost",
     port: +process.env.PORT || 8080,
     open: true, // 自动打开浏览器
-    overlay: {warnings: false, errors: true}, // 展示全屏报错
-    publicPath: '/',
+    overlay: { warnings: false, errors: true }, // 展示全屏报错
+    publicPath: "/",
     proxy: {},
     quiet: true, // for FriendlyErrorsPlugin
     watchOptions: {
       poll: false,
-    }
+    },
   },
   module: {
-    rules: [{
-      test: /\.(less|css)$/,
-      use: [{
-        loader: 'vue-style-loader',
-      }, {
-        loader: 'css-loader',
-      }, {
-        loader: 'postcss-loader',
-        options: {
-          plugins: [
-            autoprefixer,
-          ],
-        }
-      }, {
-        loader: 'less-loader',
-      }],
-    }],
+    rules: [
+      {
+        test: /\.(less|css)$/,
+        use: [
+          {
+            loader: "vue-style-loader",
+          },
+          {
+            loader: "css-loader",
+          },
+          {
+            loader: "postcss-loader",
+            options: {
+              plugins: [autoprefixer],
+            },
+          },
+          {
+            loader: "less-loader",
+          },
+        ],
+      },
+    ],
   },
-  devtool: 'cheap-module-eval-source-map',
+  devtool: "cheap-module-eval-source-map",
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': {
+      "process.env": {
         NODE_ENV: '"development"',
       },
     }),
@@ -59,28 +71,32 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     new webpack.NamedModulesPlugin(), // 开启 HMR 的时候使用该插件会显示模块的相对路径
     new webpack.NoEmitOnErrorsPlugin(),
     new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: 'index.html',
+      filename: "index.html",
+      template: "index.html",
       inject: true,
     }),
   ],
-})
+});
 
 module.exports = new Promise((resolve, reject) => {
-  portfinder.basePort = +process.env.PORT || 8080
+  portfinder.basePort = +process.env.PORT || 8080;
   portfinder.getPort((err, port) => {
     if (err) {
-      reject(err)
+      reject(err);
     } else {
-      devWebpackConfig.devServer.port = port
-      devWebpackConfig.plugins.push(new FriendlyErrorsPlugin({
-        compilationSuccessInfo: {
-          messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`],
-        },
-        onErrors: undefined,
-      }))
+      devWebpackConfig.devServer.port = port;
+      devWebpackConfig.plugins.push(
+        new FriendlyErrorsPlugin({
+          compilationSuccessInfo: {
+            messages: [
+              `Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`,
+            ],
+          },
+          onErrors: undefined,
+        })
+      );
 
-      resolve(devWebpackConfig)
+      resolve(devWebpackConfig);
     }
-  })
-})
+  });
+});
