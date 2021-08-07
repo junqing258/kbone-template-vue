@@ -19,14 +19,14 @@
 </template>
 
 <script>
-// import Vue from 'vue';
+import Vue from 'vue';
 
 export default Vue.extend({
   name: 'SelectCar',
   data: () => ({
     posCodes: ['high', 'middle', 'low'],
     posIndex: 1,
-    products: new Array(50).fill(0),
+    products: new Array(50).map((_, i) => i + 1),
   }),
   watch: {
     posIndex(val) {},
