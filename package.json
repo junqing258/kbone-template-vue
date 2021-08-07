@@ -14,12 +14,8 @@
     "lint": "eslint --cache \"src/**/*.{js,ts,vue}\"",
     "lint:fix": "eslint --cache --fix \"src/**/*.{js,ts,vue}\"",
     "build": "rimraf dist/web && cross-env NODE_ENV=production webpack --config build/webpack.prod.config.js --progress",
-    "build:mp": "rimraf dist/mp/common && cross-env NODE_ENV=production webpack --config build/webpack.mp.config.js --progress"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+    "build:mp": "rimraf dist/mp/common && cross-env NODE_ENV=production webpack --config build/webpack.mp.config.js --progress",
+    "prepare": "husky install"
   },
   "lint-staged": {
     "src/**/*.(js|jsx|vue)": "npm run lint:fix",
@@ -63,7 +59,7 @@
     "file-loader": "^1.1.4",
     "friendly-errors-webpack-plugin": "^1.6.1",
     "html-webpack-plugin": "^3.2.0",
-    "husky": "^7.0.1",
+    "husky": "^7.0.0",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
     "lint-staged": "^11.1.2",
