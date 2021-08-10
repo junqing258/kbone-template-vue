@@ -40,7 +40,6 @@ module.exports = {
     "comma-dangle": ["error", "only-multiline"],
     "import/no-webpack-loader-syntax": "off",
     "import/first": "off",
-    "linebreak-style": ["off", "windows"],
     "no-trailing-spaces": 0,
   },
   globals: {
