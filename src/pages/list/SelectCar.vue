@@ -35,8 +35,10 @@ export default Vue.extend({
       this.mode = val;
       const top = this.zones[val];
       const distance = this.top - top;
-      this.$refs.selectCarRef.style.top = `${top}px`;
-      this.$refs.selectCarRef.style.transitionDuration = `${Math.abs(distance)}ms`;
+      Object.assign(this.$refs.selectCarRef.style, {
+        top: `${top}px`,
+        transitionDuration: `${Math.abs(distance)}ms`,
+      });
     },
     touchStart(e) {
       this.easing = false;
