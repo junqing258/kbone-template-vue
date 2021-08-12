@@ -8,7 +8,7 @@
     "mp"
   ],
   "scripts": {
-    "start": "npm run mp",
+    "start": "npm run web",
     "web": "cross-env NODE_ENV=development webpack-dev-server --progress --config build/webpack.dev.config.js",
     "mp": "rimraf dist/mp/common && cross-env NODE_ENV=development webpack --config build/webpack.mp.config.js --progress",
     "lint": "eslint --cache \"src/**/*.{js,ts,vue}\"",

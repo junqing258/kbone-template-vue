@@ -4,8 +4,11 @@
     <!-- <a href="/home">回到首页</a> -->
     <!-- <button @click="onClickJump">回到首页</button> -->
     <div class="map"></div>
-    <SelectCar />
-    <!-- <Footer></Footer> -->
+    <Panel>
+      <Notice slot="select-header" />
+      <SelectList slot="select-body" />
+      <TypeList slot="select-footer" />
+    </Panel>
   </div>
 </template>
 
@@ -13,14 +16,20 @@
 import Vue from 'vue';
 import Header from '@/common/Header.vue';
 import Footer from '@/common/Footer.vue';
-import SelectCar from './SelectCar.vue';
+import Panel from './components/Panel.vue';
+import Notice from './components/Notice.vue';
+import TypeList from './components/TypeList.vue';
+import SelectList from './components/SelectList.vue';
 
 export default Vue.extend({
   name: 'List',
   components: {
     Header,
     Footer,
-    SelectCar,
+    Notice,
+    Panel,
+    TypeList,
+    SelectList,
   },
   created() {
     window.addEventListener('wxload', (query: any) => console.log('page2 wxload', query));
