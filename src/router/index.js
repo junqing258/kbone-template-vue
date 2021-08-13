@@ -1,11 +1,3 @@
-/* eslint-disable no-trailing-spaces */
-/*
- * @Author: junqing.zhang
- * @Date: 2021-08-07 11:31:31
- * @LastEditors: junqing.zhang
- * @LastEditTime: 2021-08-07 14:47:10
- * @Description:
- */
 import Vue from 'vue';
 import Router from 'vue-router';
 
