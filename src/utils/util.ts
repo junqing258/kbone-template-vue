@@ -47,10 +47,9 @@ export const debounce = (fn: { apply: (arg0: any, arg1: any[]) => void }, ms = 0
 // eslint-disable-next-line @typescript-eslint/ban-types
 export const throttle = (fn: Function, threshHold = 250, scope: any) => {
   let last: number, deferTimer: NodeJS.Timeout;
-  return function () {
+  return function (...args) {
     const context = scope || this;
-    const now = +new Date(),
-      args = arguments;
+    const now = +new Date();
     if (last && now < last + threshHold) {
       clearTimeout(deferTimer);
       deferTimer = setTimeout(function () {

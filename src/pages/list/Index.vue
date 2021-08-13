@@ -14,8 +14,6 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import Header from '@/common/Header.vue';
-import Footer from '@/common/Footer.vue';
 import Panel from './components/Panel.vue';
 import Notice from './components/Notice.vue';
 import TypeList from './components/TypeList.vue';
@@ -24,8 +22,6 @@ import SelectList from './components/SelectList.vue';
 export default Vue.extend({
   name: 'List',
   components: {
-    Header,
-    Footer,
     Notice,
     Panel,
     TypeList,

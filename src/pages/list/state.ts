@@ -1,4 +1,4 @@
-import { ref, reactive, readonly } from '@vue/composition-api';
+import { reactive, readonly } from '@vue/composition-api';
 
 const state = reactive({
   message: 'Hello!',

@@ -10,7 +10,6 @@ import Router from 'vue-router';
 import App from '@/App.vue';
 import store from '@/store';
 import Home from '@/pages/home/Index.vue';
-import List from '@/pages/list/Index.vue';
 
 Vue.use(Router);
 
