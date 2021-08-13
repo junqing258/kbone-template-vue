@@ -34,7 +34,7 @@ const router = new Router({
   ],
 });
 
-export default function createApp() {
+export default function createApp(): Vue {
   const container = document.createElement('div');
   container.id = 'app';
   document.body.appendChild(container);
