@@ -19,7 +19,7 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "*.+(js|jsx)": "npm run lint:fix",
+    "*.+(js|ts|tsx|vue)": "npm run lint:fix",
     "*.+(json|css|scss|md)": "prettier --write"
   },
   "dependencies": {
