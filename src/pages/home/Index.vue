@@ -46,7 +46,7 @@ export default Vue.extend({
     window.addEventListener('wxready', () => console.log('page1 wxready'));
     window.addEventListener('wxhide', () => console.log('page1 wxhide'));
     window.addEventListener('wxunload', () => console.log('page1 wxunload'));
-    cdd
+    cdddd
     if (process.env.isMiniprogram) {
       console.log('I am in miniprogram');
     } else {

@@ -19,7 +19,7 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "src/**/*.(js|jsx|vue)": "npm run lint",
+    "src/**/*.{js,ts,vue}": "npm run lint",
     "*.(json|yml|yaml|css|less|scss)": [
       "prettier --write"
     ]
