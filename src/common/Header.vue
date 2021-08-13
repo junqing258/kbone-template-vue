@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapState, mapActions } from 'vuex';
 
 export default {
@@ -12,7 +12,7 @@ export default {
   computed: {
     ...mapState(['headerTips', 'input']),
   },
-  mounted() {
+  mounted(): void {
     this.FAKE_ACTION('june');
   },
   methods: {

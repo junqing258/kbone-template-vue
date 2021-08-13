@@ -8,11 +8,11 @@
   "vetur.format.defaultFormatter.js": "prettier",
   "vetur.format.defaultFormatter.ts": "prettier",
   "vetur.format.defaultFormatter.sass": "sass-formatter",
-  "stylelint.autoFix": true,
   "editor.codeActionsOnSave": {
     "source.fixAll": true,
     "source.fixAll.eslint": true
   },
   "editor.formatOnSave": false,
-  "eslint.options": {}
+  "eslint.options": {},
+  "cSpell.words": ["miniprogram", "wxhide", "wxload", "wxready", "wxshow", "wxunload"]
 }
