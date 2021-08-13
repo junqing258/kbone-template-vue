@@ -19,10 +19,8 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "src/**/*.{js,ts,vue}": "npm run lint",
-    "*.(json|yml|yaml|css|less|scss)": [
-      "prettier --write"
-    ]
+    "*.+(js|jsx)": "npm run lint:fix",
+    "*.+(json|css|scss|md)": "prettier --write"
   },
   "dependencies": {
     "@vue/composition-api": "^1.0.5",
