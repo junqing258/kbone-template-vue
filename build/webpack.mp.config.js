@@ -28,7 +28,7 @@ module.exports = {
   },
   watch: isDevelop,
   target: "web", // 必需字段，不能修改
-  optimization: {
+  /* optimization: {
     runtimeChunk: false, // 必需字段，不能修改
     splitChunks: {
       // 代码分割配置，不建议修改
@@ -78,7 +78,7 @@ module.exports = {
           }),
         ]
       : [],
-  },
+  }, */
   module: {
     rules: [
       // html
@@ -198,10 +198,10 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: [".js", ".vue", ".json"],
+    extensions: ['.js', '.ts', '.vue', '.tsx', '.json'],
     alias: {
-      vue$: "vue/dist/vue.esm.js",
-      "@": path.resolve(__dirname, "../src"),
+      vue$: 'vue/dist/vue.esm.js',
+      '@': path.resolve(__dirname, '../src'),
     },
   },
   plugins: [

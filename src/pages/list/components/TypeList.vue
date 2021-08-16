@@ -10,6 +10,6 @@ export default {};
 .car-types {
   width: 100vw;
   height: 12vw;
-  background: #fff;
+  background: rgb(146, 161, 187);
 }
 </style>

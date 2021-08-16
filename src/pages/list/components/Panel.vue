@@ -1,34 +1,35 @@
 <template>
-  <div class="warp">
+  <div ref="wrapRef">
     <div
       class="panel"
       :class="[easing ? 'easing' : '']"
-      ref="selectCarRef"
+      ref="panelRef"
       @touchstart.capture="touchStart"
       @touchmove.capture="touchMove"
       @touchend.capture="touchEnd"
     >
-      <div class="select-header" ref="selectHeaderRef">
-        <slot name="select-header" />
+      <div class="panel-header">
+        <slot name="header" />
       </div>
-      <div class="select-body" ref="scrollListRef">
-        <slot name="select-body" />
+      <div class="panel-body">
+        <slot name="body" />
       </div>
     </div>
-    <div class="select-footer" ref="selectFooterRef">
-      <slot name="select-footer" />
-      <div class="select-footer-placeholder"></div>
+    <div class="panel-footer">
+      <slot name="footer" />
+      <div class="panel-footer-placeholder"></div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
+import { throttle } from '@/utils/util';
 
 export default Vue.extend({
-  name: 'SelectCarPanel',
+  name: 'DrawerPanel',
   data: () => ({
-    zones: [0],
+    partitions: [0],
     mode: null,
     products: [],
     easing: false,
@@ -36,18 +37,19 @@ export default Vue.extend({
   methods: {
     setMode(val) {
       this.mode = val;
-      const top = this.zones[val];
-      this.setTop(top);
+      this.setTop(this.partitions[val]);
     },
     setTop(top) {
-      this.$refs.selectCarRef.style.top = `${top}px`;
+      const dom: HTMLDivElement = this.$refs.panelRef;
+      dom.style.transform = `translateY(${top}px)`;
       if (this.easing) {
         const distance = this.top - top;
-        this.$refs.selectCarRef.style.transitionDuration = `${Math.abs(distance)}ms`;
+        dom.style.transitionDuration = `${Math.abs(distance)}ms`;
+        dom.style.transitionTimingFunction =
+          distance < 0 ? 'cubic-bezier(0.16, 1, 0.3, 1)' : 'cubic-bezier(0.34, 1.56, 0.64, 1)';
       } else {
-        this.$refs.selectCarRef.style.transitionDuration = null;
+        dom.style.transitionDuration = null;
       }
-
       this.top = top;
     },
     touchStart(e) {
@@ -59,52 +61,52 @@ export default Vue.extend({
       this.startX = e.touches[0].pageX;
       this.startY = e.touches[0].pageY;
       this.startTarget = e.target;
-      this.startTop = Number(this.$refs.selectCarRef.style.top.replace(/[a-z]+/i, ''));
+      this.startTop = this.top;
+    },
+    checkIneffective(e) {
+      const offsetY = e.changedTouches[0].pageY - this.startY;
+      const isDown = offsetY > 0;
+
+      const scrollListEle = this.$refs.wrapRef.querySelector('.panel-body');
+      const isInScroll = scrollListEle.contains(this.startTarget) && scrollListEle.contains(e.target);
+      return isInScroll && this.isPreventDefault === false && isDown && !this.isScrollToTop(scrollListEle);
     },
     touchMove(e) {
+      if (this.checkIneffective(e)) return;
+
       const moveY = e.changedTouches[0].pageY;
       this.offsetY = moveY - this.startY;
       const top = this.startTop + this.offsetY;
 
-      const scrollListEle = this.$refs.scrollListRef;
-      const isInScroll = scrollListEle.contains(this.startTarget) && scrollListEle.contains(e.target);
-      if (isInScroll && this.isPreventDefault === false) return;
-
-      if (top > this.zones[0] && top < this.zones[this.zones.length - 1]) {
-        e.preventDefault();
+      if (top > this.partitions[0] && top < this.partitions[this.partitions.length - 1]) {
+        e.stopPropagation();
         this.setTop(top);
       }
     },
     touchEnd(e) {
       this.easing = true;
+      if (this.checkIneffective(e)) return;
 
-      const endY = e.changedTouches[0].pageY;
-      const offsetY = endY - this.startY;
+      const offsetY = e.changedTouches[0].pageY - this.startY;
       const isUp = offsetY < 0;
       const isDown = offsetY > 0;
 
-      const scrollListEle = this.$refs.scrollListRef;
-      const isInScroll = scrollListEle.contains(this.startTarget) && scrollListEle.contains(e.target);
-      if (isInScroll && this.isPreventDefault === false) return;
-      // const isInScroll = scrollListEle.contains(this.startTarget) && scrollListEle.contains(e.target);
-      // if (isInScroll && this.isPreventDefault === false) {
-      //   if (isUp && !this.isScrollToBottom(scrollListEle)) return;
-      //   if (isDown && !this.isScrollToTop(scrollListEle)) return;
-      // }
+      if (Math.abs(offsetY) <= 5) {
+        e.stopPropagation();
+        return;
+      }
 
-      if (Math.abs(offsetY) <= 5) return;
-
-      if (isDown && this.mode < this.zones.length - 1) {
-        e.preventDefault();
+      if (isDown && this.mode < this.partitions.length - 1) {
+        e.stopPropagation();
         setTimeout(() => {
-          const n = this.zones.findIndex((v) => v > this.top);
+          const n = this.partitions.findIndex((v) => v > this.top);
           this.setMode(n);
         });
       } else if (isUp && this.mode > 0) {
-        e.preventDefault();
+        e.stopPropagation();
         setTimeout(() => {
-          const n = [...this.zones].reverse().findIndex((v) => v < this.top);
-          this.setMode(this.zones.length - 1 - n);
+          const n = [...this.partitions].reverse().findIndex((v) => v < this.top);
+          this.setMode(this.partitions.length - 1 - n);
         });
       }
     },
@@ -117,17 +119,36 @@ export default Vue.extend({
       return d;
     },
     refreshSize() {
-      const hHeight = this.$refs.selectHeaderRef.offsetHeight;
-      const fHeight = this.$refs.selectFooterRef.children[0].offsetHeight;
-      this.zones = [0, window.innerHeight * 0.4, window.innerHeight - hHeight - fHeight];
+      const header = this.$refs.wrapRef.querySelector('.panel-header');
+      const footer = this.$refs.wrapRef.querySelector('.panel-footer');
+      const headerHeight = header ? header.offsetHeight : 0;
+      const footerHeight = footer ? footer.offsetHeight : 0;
+      this.partitions = [0, window.innerHeight * 0.3, window.innerHeight - headerHeight - footerHeight + 50];
     },
   },
+  created() {
+    this.throttleRefreshSize = throttle(
+      () => {
+        this.refreshSize();
+        this.setMode(this.mode);
+      },
+      300,
+      this,
+    );
+  },
   mounted() {
+    //https://cloud.tencent.com/developer/article/1528620
+    /* this.observer = new MutationObserver((mutationsList, observer) => {
+      this.refreshSize();
+    });
+    this.observer.observe(this.$refs.panelRef, { childList: true, subtree: true }); */
+    window.addEventListener('resize', this.throttleRefreshSize);
     this.refreshSize();
     this.setMode(1);
   },
   beforeDestroy() {
-    clearInterval(this.timer);
+    // this.observer && this.observer.disconnect();
+    window.removeEventListener('resize', this.throttleRefreshSize);
   },
 });
 </script>
@@ -142,25 +163,25 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   &.easing {
-    transition: top 300ms ease-in-out;
+    transition-property: transform;
   }
 }
 
-.select-header {
+.panel-header {
   display: block;
 }
 
-.select-footer {
+.panel-footer {
   position: fixed;
   background: #fff;
   bottom: -50px;
-}
-.select-footer-placeholder {
-  width: 100%;
-  height: 50px;
+  .panel-footer-placeholder {
+    width: 100%;
+    height: 100px;
+  }
 }
 
-.select-body {
+.panel-body {
   width: 100%;
   flex-grow: 1;
   overflow: scroll;

@@ -102,8 +102,6 @@ export const remove = (arr: any[], func: (value: any, index: number, array: any[
       }, [])
     : [];
 
-/** 对象 */
-
 /** Type */
 export const isNil = (val: null | undefined) => val === undefined || val === null;
 
