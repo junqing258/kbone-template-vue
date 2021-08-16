@@ -31,7 +31,6 @@ export default Vue.extend({
   data: () => ({
     partitions: [0],
     mode: null,
-    products: [],
     easing: false,
   }),
   methods: {
@@ -63,6 +62,9 @@ export default Vue.extend({
       this.startTarget = e.target;
       this.startTop = this.top;
     },
+    /**
+     * 在内部list滑动，走系统默认滑动事件
+     */
     checkIneffective(e) {
       const offsetY = e.changedTouches[0].pageY - this.startY;
       const isDown = offsetY > 0;
@@ -118,6 +120,9 @@ export default Vue.extend({
       const d = dom.scrollHeight - dom.scrollTop - dom.clientHeight <= 1;
       return d;
     },
+    /**
+     * 设置panel的三段高度
+     */
     refreshSize() {
       const header = this.$refs.wrapRef.querySelector('.panel-header');
       const footer = this.$refs.wrapRef.querySelector('.panel-footer');
