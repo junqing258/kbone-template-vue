@@ -3,7 +3,6 @@
     <div
       class="panel"
       :class="[easing ? 'easing' : '']"
-      ref="panelRef"
       @touchstart.capture="touchStart"
       @touchmove.capture="touchMove"
       @touchend.capture="touchEnd"
@@ -39,7 +38,7 @@ export default Vue.extend({
       this.setTop(this.partitions[val]);
     },
     setTop(top) {
-      const dom: HTMLDivElement = this.$refs.panelRef;
+      const dom: HTMLDivElement = this.$refs.wrapRef.querySelector('.panel');
       dom.style.transform = `translateY(${top}px)`;
       if (this.easing) {
         const distance = this.top - top;
@@ -142,17 +141,11 @@ export default Vue.extend({
     );
   },
   mounted() {
-    //https://cloud.tencent.com/developer/article/1528620
-    /* this.observer = new MutationObserver((mutationsList, observer) => {
-      this.refreshSize();
-    });
-    this.observer.observe(this.$refs.panelRef, { childList: true, subtree: true }); */
     window.addEventListener('resize', this.throttleRefreshSize);
     this.refreshSize();
     this.setMode(1);
   },
   beforeDestroy() {
-    // this.observer && this.observer.disconnect();
     window.removeEventListener('resize', this.throttleRefreshSize);
   },
 });
