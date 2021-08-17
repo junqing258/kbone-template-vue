@@ -92,8 +92,9 @@ export default Vue.extend({
       const isUp = offsetY < 0;
       const isDown = offsetY > 0;
 
-      if (Math.abs(offsetY) <= 5) {
+      if (Math.abs(offsetY) <= 10 && Math.abs(offsetY) > 0) {
         e.stopPropagation();
+        this.setMode(this.mode);
         return;
       }
 
