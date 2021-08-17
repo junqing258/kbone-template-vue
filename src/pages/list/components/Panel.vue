@@ -52,10 +52,9 @@ export default Vue.extend({
       this.top = top;
     },
     touchStart(e) {
-      if (this.checkPreset(e)) return;
-
-      this.isPreventDefault = this.mode !== 0;
       this.easing = false;
+      if (this.checkPreset(e)) return;
+      this.isPreventDefault = this.mode !== 0;
       this.startX = e.touches[0].pageX;
       this.startY = e.touches[0].pageY;
       this.startTarget = e.target;
@@ -112,7 +111,7 @@ export default Vue.extend({
     checkPreset(e) {
       const presetScrolls = this.$refs.wrapRef.querySelectorAll('.preset-scroll');
       if (presetScrolls && presetScrolls.length > 0) {
-        for (let ele of presetScrolls) {
+        for (var ele of presetScrolls) {
           if (ele.contains(e.target) && (!this.startTarget || ele.contains(this.startTarget))) return true;
         }
       }
@@ -126,7 +125,7 @@ export default Vue.extend({
 
       const scrollListEle = this.$refs.wrapRef.querySelector('.panel-body');
       const isInScroll = scrollListEle.contains(this.startTarget) && scrollListEle.contains(e.target);
-      return isInScroll && this.isPreventDefault === false && isDown && !this.isScrollToTop(scrollListEle);
+      return this.isPreventDefault === false && isInScroll && isDown && !this.isScrollToTop(scrollListEle);
     },
     isScrollToTop(dom) {
       const d = dom.scrollTop <= 1;
@@ -148,22 +147,21 @@ export default Vue.extend({
     },
   },
   created() {
-    this.throttleRefreshSize = throttle(
-      () => {
+    this.refreshSizeAndMode = throttle(
+      (m) => {
         this.refreshSize();
-        this.setMode(this.mode);
+        this.setMode(m || this.mode);
       },
       300,
       this,
     );
   },
   mounted() {
-    window.addEventListener('resize', this.throttleRefreshSize);
-    this.refreshSize();
-    this.setMode(1);
+    window.addEventListener('resize', this.refreshSizeAndMode);
+    this.refreshSizeAndMode(1);
   },
   beforeDestroy() {
-    window.removeEventListener('resize', this.throttleRefreshSize);
+    window.removeEventListener('resize', this.refreshSizeAndMode);
   },
 });
 </script>
