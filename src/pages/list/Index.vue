@@ -37,7 +37,7 @@ export default Vue.extend({
   name: 'List',
   data: () => ({
     products: [],
-    carTypes: new Array(7).fill(0).map((_, i) => ({ id: i + 1, value: (Math.random() * 1000) | 0 })),
+    carTypes: [],
   }),
   components: {
     Panel,
@@ -51,6 +51,7 @@ export default Vue.extend({
   },
   mounted() {
     setTimeout(() => {
+      this.carTypes = new Array(7).fill(0).map((_, i) => ({ id: i + 1, value: (Math.random() * 1000) | 0 }));
       this.products = new Array(30).fill(0).map((_, i) => ({ id: i + 1, value: (Math.random() * 1000) | 0 }));
     }, 300);
   },
