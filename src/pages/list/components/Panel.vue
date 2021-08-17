@@ -1,5 +1,5 @@
 <template>
-  <div ref="wrapRef">
+  <div class="wrap" ref="wrapRef">
     <div
       class="panel"
       :class="[easing ? 'easing' : '']"
@@ -40,8 +40,9 @@ export default Vue.extend({
     setTop(top) {
       const dom: HTMLDivElement = this.$refs.wrapRef.querySelector('.panel');
       dom.style.transform = `translateY(${top}px)`;
+      let distance = 0;
       if (this.easing) {
-        const distance = this.top - top;
+        distance = this.top - top;
         dom.style.transitionDuration = `${Math.abs(distance)}ms`;
         dom.style.transitionTimingFunction =
           distance < 0 ? 'cubic-bezier(0.16, 1, 0.3, 1)' : 'cubic-bezier(0.34, 1.56, 0.64, 1)';
@@ -51,15 +52,70 @@ export default Vue.extend({
       this.top = top;
     },
     touchStart(e) {
+      if (this.checkPreset(e)) return;
+
       this.isPreventDefault = this.mode !== 0;
-      if (this.isPreventDefault) {
-        e.preventDefault();
-      }
       this.easing = false;
       this.startX = e.touches[0].pageX;
       this.startY = e.touches[0].pageY;
       this.startTarget = e.target;
       this.startTop = this.top;
+
+      if (this.isPreventDefault) {
+        e.preventDefault();
+      }
+    },
+    touchMove(e) {
+      if (this.easing) return;
+      if (this.checkPreset(e)) return;
+      if (this.checkIneffective(e)) return;
+
+      e.stopPropagation();
+      const moveY = e.changedTouches[0].pageY;
+      const offsetY = moveY - this.startY;
+      const top = this.startTop + offsetY;
+      if (top > this.partitions[0] && top < this.partitions[this.partitions.length - 1]) {
+        this.setTop(top);
+      }
+    },
+    touchEnd(e) {
+      if (this.easing) return;
+      this.easing = true;
+
+      if (this.checkPreset(e)) return;
+      if (this.checkIneffective(e)) return;
+
+      const offsetY = e.changedTouches[0].pageY - this.startY;
+      const isUp = offsetY < 0;
+      const isDown = offsetY > 0;
+
+      if (Math.abs(offsetY) <= 50 && Math.abs(offsetY) > 0) {
+        this.setMode(this.mode);
+        return;
+      }
+      e.stopPropagation();
+      if (isDown && this.mode < this.partitions.length - 1) {
+        setTimeout(() => {
+          const n = this.partitions.findIndex((v) => v > this.top);
+          this.setMode(n);
+        });
+      } else if (isUp && this.mode > 0) {
+        setTimeout(() => {
+          const n = [...this.partitions].reverse().findIndex((v) => v < this.top);
+          this.setMode(this.partitions.length - 1 - n);
+        });
+      }
+    },
+    /**
+     * class="preset-scroll"直接穿透到内部
+     */
+    checkPreset(e) {
+      const presetScrolls = this.$refs.wrapRef.querySelectorAll('.preset-scroll');
+      if (presetScrolls && presetScrolls.length > 0) {
+        for (let ele of presetScrolls) {
+          if (ele.contains(e.target) && (!this.startTarget || ele.contains(this.startTarget))) return true;
+        }
+      }
     },
     /**
      * 在内部list滑动，走系统默认滑动事件
@@ -71,46 +127,6 @@ export default Vue.extend({
       const scrollListEle = this.$refs.wrapRef.querySelector('.panel-body');
       const isInScroll = scrollListEle.contains(this.startTarget) && scrollListEle.contains(e.target);
       return isInScroll && this.isPreventDefault === false && isDown && !this.isScrollToTop(scrollListEle);
-    },
-    touchMove(e) {
-      if (this.checkIneffective(e)) return;
-
-      const moveY = e.changedTouches[0].pageY;
-      this.offsetY = moveY - this.startY;
-      const top = this.startTop + this.offsetY;
-
-      if (top > this.partitions[0] && top < this.partitions[this.partitions.length - 1]) {
-        e.stopPropagation();
-        this.setTop(top);
-      }
-    },
-    touchEnd(e) {
-      this.easing = true;
-      if (this.checkIneffective(e)) return;
-
-      const offsetY = e.changedTouches[0].pageY - this.startY;
-      const isUp = offsetY < 0;
-      const isDown = offsetY > 0;
-
-      if (Math.abs(offsetY) <= 10 && Math.abs(offsetY) > 0) {
-        e.stopPropagation();
-        this.setMode(this.mode);
-        return;
-      }
-
-      if (isDown && this.mode < this.partitions.length - 1) {
-        e.stopPropagation();
-        setTimeout(() => {
-          const n = this.partitions.findIndex((v) => v > this.top);
-          this.setMode(n);
-        });
-      } else if (isUp && this.mode > 0) {
-        e.stopPropagation();
-        setTimeout(() => {
-          const n = [...this.partitions].reverse().findIndex((v) => v < this.top);
-          this.setMode(this.partitions.length - 1 - n);
-        });
-      }
     },
     isScrollToTop(dom) {
       const d = dom.scrollTop <= 1;
@@ -153,6 +169,13 @@ export default Vue.extend({
 </script>
 
 <style lang="less">
+.wrap {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
 .panel {
   position: fixed;
   width: 100vw;

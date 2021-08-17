@@ -2,11 +2,23 @@
   <div>
     <div class="map"></div>
     <Panel>
-      <template slot="header">
-        <Notice />
-        <TypeList />
-      </template>
-      <SelectList slot="body" />
+      <div class="header" slot="header">
+        <div class="notice"></div>
+        <div class="car-types preset-scroll">
+          <ul>
+            <li class="product-item" v-for="item in carTypes" :key="item.id">
+              {{ item.value }}
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div slot="body">
+        <ul>
+          <li class="product-item" v-for="item in products" :key="item.id">
+            {{ item.value }}
+          </li>
+        </ul>
+      </div>
       <template slot="footer">
         <div class="bottom-submit">
           <div></div>
@@ -20,17 +32,15 @@
 <script lang="ts">
 import Vue from 'vue';
 import Panel from './components/Panel.vue';
-import Notice from './components/Notice.vue';
-import TypeList from './components/TypeList.vue';
-import SelectList from './components/SelectList.vue';
 
 export default Vue.extend({
   name: 'List',
+  data: () => ({
+    products: [],
+    carTypes: new Array(7).fill(0).map((_, i) => ({ id: i + 1, value: (Math.random() * 1000) | 0 })),
+  }),
   components: {
-    Notice,
     Panel,
-    TypeList,
-    SelectList,
   },
   created() {
     window.addEventListener('wxload', (query: any) => console.log('page2 wxload', query));
@@ -38,6 +48,11 @@ export default Vue.extend({
     window.addEventListener('wxready', () => console.log('page2 wxready'));
     window.addEventListener('wxhide', () => console.log('page2 wxhide'));
     window.addEventListener('wxunload', () => console.log('page2 wxunload'));
+  },
+  mounted() {
+    setTimeout(() => {
+      this.products = new Array(30).fill(0).map((_, i) => ({ id: i + 1, value: (Math.random() * 1000) | 0 }));
+    }, 300);
   },
   methods: {
     onClickJump() {
@@ -51,6 +66,61 @@ export default Vue.extend({
 </script>
 
 <style lang="less">
+.panel {
+  position: relative;
+  background: #f1f2f7;
+  border-radius: 20px 20px 0 0;
+  overflow: hidden;
+  border-radius: 20px 20px 0 0;
+}
+.header {
+  position: relative;
+}
+
+.notice {
+  width: 100%;
+  height: 10vw;
+  border-radius: 2.5vw 2.5vw 0 0;
+  background: turquoise;
+  position: relative;
+  &::after {
+    content: ' ';
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 5vw;
+    bottom: -4vw;
+    left: 0;
+    background: turquoise;
+  }
+}
+
+.car-types {
+  position: relative;
+  width: 100vw;
+  height: 12vw;
+  background: #f1f2f7;
+  border-radius: 2.5vw 2.5vw 0 0;
+  overflow-x: scroll;
+  > ul {
+    width: fit-content;
+    white-space: nowrap;
+    > li {
+      display: inline-block;
+      width: 20vw;
+    }
+  }
+}
+
+.product-item {
+  width: 90%;
+  height: 10vw;
+  margin: auto;
+  background: rgb(209, 219, 234);
+  margin-bottom: 1vw;
+  display: block;
+}
+
 .bottom-submit {
   position: relative;
   width: 100vw;
