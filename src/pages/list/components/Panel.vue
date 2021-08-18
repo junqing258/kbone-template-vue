@@ -112,7 +112,7 @@ export default Vue.extend({
       const presetScrolls = this.$refs.wrapRef.querySelectorAll('.preset-scroll');
       if (presetScrolls && presetScrolls.length > 0) {
         for (var ele of presetScrolls) {
-          if (ele.contains(e.target) && (!this.startTarget || ele.contains(this.startTarget))) return true;
+          if (ele.contains(e.target) /* && (!this.startTarget || ele.contains(this.startTarget)) */) return true;
         }
       }
     },
