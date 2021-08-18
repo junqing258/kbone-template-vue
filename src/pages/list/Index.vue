@@ -3,10 +3,15 @@
     <div class="map"></div>
     <Panel>
       <div class="header" slot="header">
-        <div class="notice"></div>
+        <div class="notice" @click.capture="onNoticeClick"></div>
         <div class="car-types preset-scroll">
           <ul>
-            <li class="product-item" v-for="item in carTypes" :key="item.id">
+            <li
+              class="product-item"
+              v-for="item in carTypes"
+              :key="item.id"
+              @click.capture="onCarTypeClick(item.value)"
+            >
               {{ item.value }}
             </li>
           </ul>
@@ -14,7 +19,7 @@
       </div>
       <div slot="body">
         <ul>
-          <li class="product-item" v-for="item in products" :key="item.id">
+          <li class="product-item" v-for="item in products" :key="item.id" @click.capture="onCarClick(item.value)">
             {{ item.value }}
           </li>
         </ul>
@@ -56,6 +61,15 @@ export default Vue.extend({
     }, 300);
   },
   methods: {
+    onNoticeClick() {
+      alert('公告');
+    },
+    onCarTypeClick(val) {
+      alert('选车型' + val);
+    },
+    onCarClick(val) {
+      alert('选车' + val);
+    },
     onClickJump() {
       window.location.href = '/home';
     },

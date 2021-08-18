@@ -60,7 +60,7 @@ export default Vue.extend({
       this.startTarget = e.target;
       this.startTop = this.top;
 
-      if (this.isPreventDefault) {
+      if (this.checkIneffective(e)) {
         e.preventDefault();
       }
     },
@@ -69,11 +69,11 @@ export default Vue.extend({
       if (this.checkPreset(e)) return;
       if (this.checkIneffective(e)) return;
 
-      e.stopPropagation();
       const moveY = e.changedTouches[0].pageY;
       const offsetY = moveY - this.startY;
       const top = this.startTop + offsetY;
       if (top > this.partitions[0] && top < this.partitions[this.partitions.length - 1]) {
+        e.preventDefault();
         this.setTop(top);
       }
     },
@@ -92,15 +92,17 @@ export default Vue.extend({
         this.setMode(this.mode);
         return;
       }
-      e.stopPropagation();
+
       if (isDown && this.mode < this.partitions.length - 1) {
+        e.preventDefault();
+        const n = this.partitions.findIndex((v) => v > this.top);
         setTimeout(() => {
-          const n = this.partitions.findIndex((v) => v > this.top);
           this.setMode(n);
         });
       } else if (isUp && this.mode > 0) {
+        e.preventDefault();
+        const n = [...this.partitions].reverse().findIndex((v) => v < this.top);
         setTimeout(() => {
-          const n = [...this.partitions].reverse().findIndex((v) => v < this.top);
           this.setMode(this.partitions.length - 1 - n);
         });
       }
