@@ -22,16 +22,18 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import { throttle } from '@/utils/util';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'DrawerPanel',
-  data: () => ({
-    partitions: [0],
-    mode: null,
-    easing: false,
-  }),
+  setup: () => {
+    return {
+      partitions: [0],
+      mode: null,
+      easing: false,
+    };
+  },
   methods: {
     setMode(val) {
       this.mode = val;
@@ -180,7 +182,7 @@ export default Vue.extend({
   position: fixed;
   width: 100vw;
   background: #f1f2f7;
-  border-radius: 2.5vw 2.5vw 0 0;
+  border-radius: 20px 20px 0 0;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -188,21 +190,20 @@ export default Vue.extend({
     transition-property: transform;
   }
 }
-
 .panel-header {
   display: block;
 }
-
 .panel-footer {
   position: fixed;
   background: #fff;
+  /* px-to-viewport-ignore-next */
   bottom: -50px;
   .panel-footer-placeholder {
     width: 100%;
+    /* px-to-viewport-ignore-next */
     height: 100px;
   }
 }
-
 .panel-body {
   width: 100%;
   flex-grow: 1;

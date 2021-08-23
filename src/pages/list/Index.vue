@@ -3,14 +3,14 @@
     <div class="map"></div>
     <Panel>
       <div class="header" slot="header">
-        <div class="notice" @click.capture="onNoticeClick"></div>
+        <div class="notice" @click.prevent="onNoticeClick"></div>
         <div class="car-types preset-scroll">
           <ul>
             <li
               class="product-item"
               v-for="item in carTypes"
               :key="item.id"
-              @click.capture="onCarTypeClick(item.value)"
+              @click.prevent="onCarTypeClick(item.value)"
             >
               {{ item.value }}
             </li>
@@ -19,17 +19,15 @@
       </div>
       <div slot="body">
         <ul>
-          <li class="product-item" v-for="item in products" :key="item.id" @click.capture="onCarClick(item.value)">
+          <li class="product-item" v-for="item in products" :key="item.id" @click.prevent="onCarClick(item.value)">
             {{ item.value }}
           </li>
         </ul>
       </div>
-      <template slot="footer">
-        <div class="bottom-submit">
-          <div></div>
-          <a class="btn-submit" @click.prevent="onSubmit">立即打车</a>
-        </div>
-      </template>
+      <div slot="footer" class="bottom-submit">
+        <div></div>
+        <a class="btn-submit" @click.prevent="onSubmit">立即打车</a>
+      </div>
     </Panel>
   </div>
 </template>
@@ -95,7 +93,7 @@ export default Vue.extend({
 .notice {
   width: 100%;
   height: 10vw;
-  border-radius: 2.5vw 2.5vw 0 0;
+  border-radius: 20px 20px 0 0;
   background: turquoise;
   position: relative;
   &::after {
@@ -139,11 +137,12 @@ export default Vue.extend({
 .bottom-submit {
   position: relative;
   width: 100vw;
-  box-shadow: 0px -3px 10px 0px rgb(187 187 187 / 28%);
+  box-shadow: 0px -3px 10px 0px rgba(187, 187, 187, 0.28);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
+
 .btn-submit {
   display: flex;
   align-items: center;

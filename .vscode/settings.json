@@ -14,5 +14,5 @@
   },
   "editor.formatOnSave": false,
   "eslint.options": {},
-  "cSpell.words": ["miniprogram", "wxhide", "wxload", "wxready", "wxshow", "wxunload"]
+  "cSpell.words": ["miniprogram", "wxhide", "wxload", "wxready", "wxshow", "wxunload", "ycomponents"]
 }

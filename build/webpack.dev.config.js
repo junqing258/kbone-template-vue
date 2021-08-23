@@ -1,17 +1,9 @@
-/*
- * @Author: junqing.zhang
- * @Date: 2021-08-07 11:31:31
- * @LastEditors: junqing.zhang
- * @LastEditTime: 2021-08-07 17:43:25
- * @Description: 
- */
 const webpack = require("webpack");
 const merge = require("webpack-merge");
 const baseWebpackConfig = require("./webpack.base.config");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin");
 const portfinder = require("portfinder");
-const autoprefixer = require("autoprefixer");
 const { VueLoaderPlugin } = require("vue-loader");
 
 const devWebpackConfig = merge(baseWebpackConfig, {
@@ -49,7 +41,20 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           {
             loader: "postcss-loader",
             options: {
-              plugins: [autoprefixer],
+              plugins: [
+                require('autoprefixer')(),
+                require('postcss-px-to-viewport')({
+                  viewportWidth: 750, //视口的宽度，对应的时设计稿的宽度/2，一般为750
+                  viewportHeight: 1334, //视口的高度，对应的是设计稿的高度（也可以不配置）
+                  unitPrecision: 3, //指定‘px’转换为视口单位值的小数位数（很多时候无法整除）
+                  viewportUnit: 'vw', //指定需要转换成的视口单位，建议使用vw
+                  propList: ['*'],
+                  selectorBlankList: ['ignore'], //指定不需要转换的类
+                  minPixelValue: 1, //小于或等于‘1px’不转换为视口单位
+                  mediaQuery: false,//允许在媒体查询中转换为‘px’
+                  exclude:[/ycomponents/]  //不需要转化的组件文件名正则，必须是正则表达式
+                }),
+              ],
             },
           },
           {
