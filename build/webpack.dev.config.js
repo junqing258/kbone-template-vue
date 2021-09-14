@@ -4,7 +4,6 @@ const baseWebpackConfig = require("./webpack.base.config");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin");
 const portfinder = require("portfinder");
-const { VueLoaderPlugin } = require("vue-loader");
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   mode: "development",
@@ -72,7 +71,6 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         NODE_ENV: '"development"',
       },
     }),
-    new VueLoaderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(), // 开启 HMR 的时候使用该插件会显示模块的相对路径
     new webpack.NoEmitOnErrorsPlugin(),

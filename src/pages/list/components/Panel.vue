@@ -3,9 +3,9 @@
     <div
       class="panel"
       :class="[easing ? 'easing' : '']"
-      @touchstart.capture="touchStart"
-      @touchmove.capture="touchMove"
-      @touchend.capture="touchEnd"
+      @touchstart="touchStart"
+      @touchmove="touchMove"
+      @touchend="touchEnd"
     >
       <div class="panel-header">
         <slot name="header" />
@@ -68,7 +68,7 @@ export default defineComponent({
     },
     touchMove(e) {
       if (this.easing) return;
-      if (this.checkPreset(e)) return;
+      // if (this.checkPreset(e)) return;
       if (this.checkIneffective(e)) return;
 
       const moveY = e.changedTouches[0].pageY;
@@ -83,7 +83,7 @@ export default defineComponent({
       if (this.easing) return;
       this.easing = true;
 
-      if (this.checkPreset(e)) return;
+      // if (this.checkPreset(e)) return;
       if (this.checkIneffective(e)) return;
 
       const offsetY = e.changedTouches[0].pageY - this.startY;
@@ -110,7 +110,7 @@ export default defineComponent({
       }
     },
     /**
-     * class="preset-scroll"直接穿透到内部
+     * class="preset-scroll"直接穿透到内部，执行系统默认滑动事件
      */
     checkPreset(e) {
       const presetScrolls = this.$refs.wrapRef.querySelectorAll('.preset-scroll');
@@ -121,7 +121,7 @@ export default defineComponent({
       }
     },
     /**
-     * 在内部list滑动，走系统默认滑动事件
+     * 在内部list滑动，执行系统默认滑动事件
      */
     checkIneffective(e) {
       const offsetY = e.changedTouches[0].pageY - this.startY;

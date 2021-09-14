@@ -35,6 +35,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Panel from './components/Panel.vue';
+import { OrderStatusTypes } from '@/typing/order';
 
 export default Vue.extend({
   name: 'List',

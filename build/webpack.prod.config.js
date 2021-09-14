@@ -7,7 +7,6 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const autoprefixer = require("autoprefixer");
-const { VueLoaderPlugin } = require("vue-loader");
 
 const webpackConfig = merge(baseWebpackConfig, {
   mode: "production",
@@ -95,7 +94,6 @@ const webpackConfig = merge(baseWebpackConfig, {
         NODE_ENV: '"production"',
       },
     }),
-    new VueLoaderPlugin(),
     // 分离 css 文件
     new MiniCssExtractPlugin({
       filename: path.posix.join("static", "css/[name].[hash].css"),
