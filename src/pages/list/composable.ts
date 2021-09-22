@@ -1,4 +1,4 @@
-import { reactive, readonly, toRefs, onMounted } from '@vue/composition-api';
+import { reactive, readonly, toRefs, onMounted, onBeforeUnmount } from '@vue/composition-api';
 
 export const useProductsInquiry = () => {
   const state = reactive({
@@ -19,8 +19,14 @@ export const useProductsInquiry = () => {
     },
   };
 
+  let timer;
   onMounted(() => {
     actions.refreshCarList();
+    timer = setInterval(actions.refreshCarList, 1000);
+  });
+
+  onBeforeUnmount(() => {
+    clearInterval(timer);
   });
 
   return {
