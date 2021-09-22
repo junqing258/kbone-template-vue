@@ -72,7 +72,7 @@
     "optimize-css-assets-webpack-plugin": "^5.0.8",
     "portfinder": "^1.0.28",
     "postcss-loader": "^2.1.6",
-    "postcss-px-to-viewport": "git+https://github.com/evrone/postcss-px-to-viewport.git",
+    "postcss-px-to-viewport": "^v1.1.1",
     "prettier": "^2.3.2",
     "reduce-loader": "^0.3.2",
     "rimraf": "^2.7.1",

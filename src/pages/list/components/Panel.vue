@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-import { throttle } from '@/utils/util';
+import { debounce } from '@/utils/util';
 
 export default defineComponent({
   name: 'DrawerPanel',
@@ -151,7 +151,7 @@ export default defineComponent({
     },
   },
   created() {
-    this.refreshSizeAndMode = throttle(
+    this.refreshSizeAndMode = debounce(
       (m) => {
         this.refreshSize();
         this.setMode(m || this.mode);

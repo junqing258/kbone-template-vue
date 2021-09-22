@@ -44,7 +44,6 @@ export const debounce = (fn: { apply: (arg0: any, arg1: any[]) => void }, ms = 0
   };
 };
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 export const throttle = (fn: Function, threshHold = 250, scope: any) => {
   let last: number, deferTimer: NodeJS.Timeout;
   return function (...args) {
@@ -64,11 +63,11 @@ export const throttle = (fn: Function, threshHold = 250, scope: any) => {
 };
 
 /* Math */
-export const randomNumberInRange = (min: number, max: number) => Math.random() * (max - min) + min;
+export const randomNumber = (min: number, max: number) => Math.random() * (max - min) + min;
 
-export const randomIntegerInRange = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
+export const randomInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-export const randomIntArrayInRange = (min: number, max: number, n = 1) =>
+export const randomIntArray = (min: number, max: number, n = 1) =>
   Array.from({ length: n }, () => Math.floor(Math.random() * (max - min + 1)) + min);
 
 export const sumBy = (arr: any[], fn: string | number) =>

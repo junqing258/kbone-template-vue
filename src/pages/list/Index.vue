@@ -33,38 +33,29 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import Panel from './components/Panel.vue';
-import { OrderStatusTypes } from '@/typing/order';
+import { defineComponent } from '@vue/composition-api';
+import { useProductsInquiry } from './composable';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'List',
-  data: () => ({
-    products: [],
-    carTypes: [],
-  }),
+  setup: () => {
+    const { products, carTypes, switchSelectedCarType } = useProductsInquiry();
+    return {
+      products,
+      carTypes,
+      switchSelectedCarType,
+    };
+  },
   components: {
     Panel,
-  },
-  created() {
-    window.addEventListener('wxload', (query: any) => console.log('page2 wxload', query));
-    window.addEventListener('wxshow', () => console.log('page2 wxshow'));
-    window.addEventListener('wxready', () => console.log('page2 wxready'));
-    window.addEventListener('wxhide', () => console.log('page2 wxhide'));
-    window.addEventListener('wxunload', () => console.log('page2 wxunload'));
-  },
-  mounted() {
-    setTimeout(() => {
-      this.carTypes = new Array(7).fill(0).map((_, i) => ({ id: i + 1, value: (Math.random() * 1000) | 0 }));
-      this.products = new Array(30).fill(0).map((_, i) => ({ id: i + 1, value: (Math.random() * 1000) | 0 }));
-    }, 300);
   },
   methods: {
     onNoticeClick() {
       alert('公告');
     },
     onCarTypeClick(val) {
-      alert('选车型' + val);
+      this.switchSelectedCarType(val, true);
     },
     onCarClick(val) {
       alert('选车' + val);
@@ -75,6 +66,19 @@ export default Vue.extend({
     onSubmit() {
       console.log('立即打车');
     },
+  },
+  created() {
+    window.addEventListener('wxload', (query: any) => console.log('page2 wxload', query));
+    window.addEventListener('wxshow', () => console.log('page2 wxshow'));
+    window.addEventListener('wxready', () => console.log('page2 wxready'));
+    window.addEventListener('wxhide', () => console.log('page2 wxhide'));
+    window.addEventListener('wxunload', () => console.log('page2 wxunload'));
+  },
+  mounted() {
+    // this.timer = setInterval(actions.refreshCarList, 3000);
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
   },
 });
 </script>
@@ -155,6 +159,5 @@ export default Vue.extend({
   background: rgb(6, 197, 132);
   color: #fff;
   margin: auto;
-  margin-top: auto;
 }
 </style>
