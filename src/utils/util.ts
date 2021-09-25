@@ -44,7 +44,7 @@ export const debounce = (fn: { apply: (arg0: any, arg1: any[]) => void }, ms = 0
   };
 };
 
-export const throttle = (fn: Function, threshHold = 250, scope: any) => {
+export const throttle = (fn: Function, threshHold = 250, scope?: any) => {
   let last: number, deferTimer: NodeJS.Timeout;
   return function (...args) {
     const context = scope || this;

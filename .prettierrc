@@ -6,5 +6,6 @@
   "tabWidth": 2,
   "arrowParens": "always",
   "importOrder": ["^[a-zA-Z](.*)$", "^@[a-zA-Z](.*)$$", "^[./]"],
-  "importOrderSeparation": true
+  "importOrderSeparation": true,
+  "endOfLine": "lf"
 }

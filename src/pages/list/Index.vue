@@ -6,18 +6,13 @@
         <div class="notice" @click.prevent="onNoticeClick"></div>
         <div class="car-types preset-scroll no-scrollbar">
           <ul class="types-list">
-            <li
-              class="product-item"
-              v-for="item in carTypes"
-              :key="item.id"
-              @click.prevent="onCarTypeClick(item.value)"
-            >
+            <li class="type-item" v-for="item in carTypes" :key="item.id" @click.prevent="onCarTypeClick(item.value)">
               {{ item.value }}
             </li>
           </ul>
         </div>
       </div>
-      <div slot="body" class="products no-scrollbar">
+      <div slot="body" ref="scrollRef" class="products no-scrollbar">
         <ul>
           <li class="product-item" v-for="item in products" :key="item.id" @click.prevent="onCarClick(item.value)">
             {{ item.value }}
@@ -34,13 +29,18 @@
 
 <script lang="ts">
 import Panel from './components/Panel.vue';
-import { defineComponent } from '@vue/composition-api';
-import { useProductsInquiry } from './composable/useProductsInquiry';
+import { defineComponent, ref } from '@vue/composition-api';
+import useProductsInquiry from './composable/useProductsInquiry';
+import useOnScroll from './composable/useOnScroll';
 
 export default defineComponent({
   name: 'List',
   setup: () => {
     const { products, carTypes, switchSelectedCarType } = useProductsInquiry();
+    const scrollRef = ref<HTMLElement | null>(null);
+    const { scrollY } = useOnScroll(scrollRef);
+    console.log('=================', scrollY);
+
     return {
       loaded: false,
       products,
@@ -155,9 +155,14 @@ export default defineComponent({
   > ul {
     width: fit-content;
     white-space: nowrap;
-    > li {
-      display: inline-block;
-      width: 20vw;
+    > li.type-item {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      background: rgb(209, 219, 234);
+      margin: 0 2px;
+      width: 120px;
+      height: 90px;
     }
   }
 }
@@ -194,7 +199,6 @@ export default defineComponent({
   flex-direction: column;
   background: rgb(6, 197, 132);
   color: #fff;
-  margin: auto;
-  margin-top: 40px;
+  margin: 30px auto;
 }
 </style>

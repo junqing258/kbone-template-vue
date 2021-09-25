@@ -28,17 +28,6 @@ module.exports = {
     },
   },
   rules: {
-    'no-param-reassign': [
-      'error',
-      {
-        props: true,
-        ignorePropertyModificationsFor: [
-          'state', // for vuex state
-          'acc', // for reduce accumulators
-          'e', // for e.return value
-        ],
-      },
-    ],
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     // others

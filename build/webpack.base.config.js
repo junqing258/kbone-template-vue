@@ -1,7 +1,6 @@
 const path = require('path');
 const eslintFriendlyFormatter = require('eslint-friendly-formatter');
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
-const { ESBuildPlugin } = require('esbuild-loader');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 module.exports = {
   context: path.resolve(__dirname, '../'),
@@ -44,7 +43,7 @@ module.exports = {
         ],
       },
       // ts
-      /* {
+      {
         test: /\.tsx?$/,
         exclude: /node_modules/,
         use: [
@@ -65,41 +64,18 @@ module.exports = {
             },
           },
         ],
-      }, */
+      },
       // js
-      /* {
-        test: /\.js$/,
+      {
+        test: /\.m?js$/,
         loader: 'babel-loader',
-        include: [path.resolve(__dirname, '../src')],
-      }, */
+        include: [
+          path.resolve(__dirname, '../src'), 
+          path.resolve(__dirname, '../node_modules/@vueuse'),
+          // path.resolve(__dirname, '../node_modules/@vue/composition-api')
+        ],
+      },
 
-      {
-        test: /\.js$/,
-        exclude: /node_modules|\vue\/dist|\vue-loader/,
-        loader: 'esbuild-loader',
-        options: {
-          loader: 'js',
-          target: 'esnext',
-        },
-      },
-      {
-        test: /\.ts$/,
-        exclude: /node_modules|\vue\/dist|\vue-loader/,
-        loader: 'esbuild-loader',
-        options: {
-          loader: 'ts',
-          target: 'esnext',
-        },
-      },
-      {
-        test: /\.tsx$/,
-        exclude: /node_modules|\vue\/dist|\vue-loader/,
-        loader: 'esbuild-loader',
-        options: {
-          loader: 'tsx',
-          target: 'esnext',
-        },
-      },
       // img res
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -129,9 +105,9 @@ module.exports = {
       },
     ],
   },
-  plugins: [new VueLoaderPlugin(), new ESBuildPlugin()],
+  plugins: [new VueLoaderPlugin()],
   resolve: {
-    extensions: ['.js', '.ts', '.vue', '.tsx', '.json'],
+    extensions: ['.js', '.mjs', '.ts', '.vue', '.tsx', '.json'],
     alias: {
       vue$: 'vue/dist/vue.esm.js',
       '@': path.resolve(__dirname, '../src'),

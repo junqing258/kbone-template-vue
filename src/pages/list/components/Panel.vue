@@ -3,7 +3,6 @@
     <div
       class="panel"
       :class="[easing ? 'easing' : '']"
-      :style="{ transform: `translate(0, ${top}px)` }"
       @touchstart="touchStart"
       @touchmove="touchMove"
       @touchend="touchEnd"
@@ -20,7 +19,6 @@
     </div>
     <div class="panel-footer">
       <slot name="footer" />
-      <div class="panel-footer-placeholder"></div>
     </div>
   </div>
 </template>
@@ -28,20 +26,18 @@
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
 import { debounce } from '@/utils/util';
-import { useScroll } from '@vueuse/core';
 
 export default defineComponent({
   name: 'DrawerPanel',
-  props: {
-    loading: Boolean,
-  },
-  setup: () => {
+  setup: (props: any) => {
     return {
       partitions: [0],
-      top: window.innerHeight * 0.3,
       mode: 1,
       easing: false,
     };
+  },
+  props: {
+    loading: Boolean,
   },
   methods: {
     setMode(val) {
@@ -50,10 +46,16 @@ export default defineComponent({
     },
     setTop(top) {
       const dom: HTMLDivElement = this.$refs.wrapRef.querySelector('.panel');
-      const distance = this.top - top;
-      dom.style.transitionDuration = this.easing ? `${Math.abs(distance * 2)}ms` : '0ms';
-      dom.style.transitionTimingFunction = this.easing ? 'cubic-bezier(0.16, 1, 0.3, 1)' : null;
-
+      let distance = 0;
+      if (this.easing) {
+        distance = this.top - top;
+        dom.style.transitionDuration = `${Math.abs(distance)}ms`;
+        dom.style.transitionTimingFunction =
+          distance < 0 ? 'cubic-bezier(0.16, 1, 0.3, 1)' : 'cubic-bezier(0.34, 1.56, 0.64, 1)';
+      } else {
+        dom.style.transitionDuration = null;
+      }
+      dom.style.transform = `translateY(${top}px)`;
       this.top = top;
     },
     touchStart(e) {
@@ -62,6 +64,7 @@ export default defineComponent({
       this.startX = e.touches[0].pageX;
       this.startY = e.touches[0].pageY;
       this.startTarget = e.target;
+      this.startTop = this.top;
 
       if (this.checkIneffective(e)) {
         e.preventDefault();
@@ -69,17 +72,14 @@ export default defineComponent({
     },
     touchMove(e) {
       if (this.easing) return;
+      if (this.checkPreset(e)) return;
       if (this.checkIneffective(e)) return;
 
-      if (typeof this.startY !== 'number') {
-        this.startY = e.changedTouches[0].pageY;
-      }
-
-      const offsetY = e.changedTouches[0].pageY - this.startY;
-      const top = this.top + offsetY;
-      if (top >= this.partitions[0] && top <= this.partitions[this.partitions.length - 1]) {
-        // e.preventDefault();
-        console.log('===', top);
+      const moveY = e.changedTouches[0].pageY;
+      const offsetY = moveY - this.startY;
+      const top = this.startTop + offsetY;
+      if (top > this.partitions[0] && top < this.partitions[this.partitions.length - 1]) {
+        e.preventDefault();
         this.setTop(top);
       }
     },
@@ -87,6 +87,7 @@ export default defineComponent({
       if (this.easing) return;
       this.easing = true;
 
+      if (this.checkPreset(e)) return;
       if (this.checkIneffective(e)) return;
 
       const offsetY = e.changedTouches[0].pageY - this.startY;
@@ -192,6 +193,7 @@ export default defineComponent({
   height: 100vh;
   display: flex;
   flex-direction: column;
+  transform: translateY(30vh);
   &.easing {
     transition-property: transform;
   }
@@ -203,10 +205,9 @@ export default defineComponent({
   position: fixed;
   background: #fff;
   /* px-to-viewport-ignore-next */
-  bottom: -50px;
+  bottom: 0px;
   .panel-footer-placeholder {
     width: 100%;
-    /* px-to-viewport-ignore-next */
     height: 100px;
   }
 }
