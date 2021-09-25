@@ -3,16 +3,20 @@
     <div
       class="panel"
       :class="[easing ? 'easing' : '']"
+      :style="{ transform: `translate(0, ${top}px)` }"
       @touchstart="touchStart"
       @touchmove="touchMove"
       @touchend="touchEnd"
     >
-      <div class="panel-header">
-        <slot name="header" />
-      </div>
-      <div class="panel-body">
-        <slot name="body" />
-      </div>
+      <van-skeleton v-if="loading" title :row="5" />
+      <template v-else>
+        <div class="panel-header">
+          <slot name="header" />
+        </div>
+        <div class="panel-body">
+          <slot name="body" />
+        </div>
+      </template>
     </div>
     <div class="panel-footer">
       <slot name="footer" />
@@ -27,10 +31,14 @@ import { debounce } from '@/utils/util';
 
 export default defineComponent({
   name: 'DrawerPanel',
+  props: {
+    loading: Boolean,
+  },
   setup: () => {
     return {
       partitions: [0],
-      mode: null,
+      top: window.innerHeight * 0.3,
+      mode: 1,
       easing: false,
     };
   },
@@ -41,26 +49,18 @@ export default defineComponent({
     },
     setTop(top) {
       const dom: HTMLDivElement = this.$refs.wrapRef.querySelector('.panel');
-      dom.style.transform = `translateY(${top}px)`;
-      let distance = 0;
-      if (this.easing) {
-        distance = this.top - top;
-        dom.style.transitionDuration = `${Math.abs(distance)}ms`;
-        dom.style.transitionTimingFunction =
-          distance < 0 ? 'cubic-bezier(0.16, 1, 0.3, 1)' : 'cubic-bezier(0.34, 1.56, 0.64, 1)';
-      } else {
-        dom.style.transitionDuration = null;
-      }
+      const distance = this.top - top;
+      dom.style.transitionDuration = this.easing ? `${Math.abs(distance * 2)}ms` : '0ms';
+      dom.style.transitionTimingFunction = this.easing ? 'cubic-bezier(0.16, 1, 0.3, 1)' : null;
+
       this.top = top;
     },
     touchStart(e) {
       this.easing = false;
-      if (this.checkPreset(e)) return;
       this.isPreventDefault = this.mode !== 0;
       this.startX = e.touches[0].pageX;
       this.startY = e.touches[0].pageY;
       this.startTarget = e.target;
-      this.startTop = this.top;
 
       if (this.checkIneffective(e)) {
         e.preventDefault();
@@ -68,14 +68,17 @@ export default defineComponent({
     },
     touchMove(e) {
       if (this.easing) return;
-      // if (this.checkPreset(e)) return;
       if (this.checkIneffective(e)) return;
 
-      const moveY = e.changedTouches[0].pageY;
-      const offsetY = moveY - this.startY;
-      const top = this.startTop + offsetY;
-      if (top > this.partitions[0] && top < this.partitions[this.partitions.length - 1]) {
-        e.preventDefault();
+      if (typeof this.startY !== 'number') {
+        this.startY = e.changedTouches[0].pageY;
+      }
+
+      const offsetY = e.changedTouches[0].pageY - this.startY;
+      const top = this.top + offsetY;
+      if (top >= this.partitions[0] && top <= this.partitions[this.partitions.length - 1]) {
+        // e.preventDefault();
+        console.log('===', top);
         this.setTop(top);
       }
     },
@@ -83,7 +86,6 @@ export default defineComponent({
       if (this.easing) return;
       this.easing = true;
 
-      // if (this.checkPreset(e)) return;
       if (this.checkIneffective(e)) return;
 
       const offsetY = e.changedTouches[0].pageY - this.startY;
@@ -143,28 +145,31 @@ export default defineComponent({
      * 设置panel的三段高度
      */
     refreshSize() {
+      const gHeight = document.documentElement.clientHeight;
       const header = this.$refs.wrapRef.querySelector('.panel-header');
       const footer = this.$refs.wrapRef.querySelector('.panel-footer');
+      const body = this.$refs.wrapRef.querySelector('.panel-body');
       const headerHeight = header ? header.offsetHeight : 0;
       const footerHeight = footer ? footer.offsetHeight : 0;
-      this.partitions = [0, window.innerHeight * 0.3, window.innerHeight - headerHeight - footerHeight + 50];
+      body.style.height = gHeight - headerHeight - footerHeight + 'px';
+      this.partitions = [0, gHeight * 0.3, gHeight - headerHeight - footerHeight + 50];
     },
   },
   created() {
-    this.refreshSizeAndMode = debounce(
-      (m) => {
-        this.refreshSize();
-        this.setMode(m || this.mode);
-      },
-      300,
-      this,
-    );
+    this.refreshSizeAndMode = debounce((m) => {
+      this.refreshSize();
+      this.setMode(Number.isInteger(m) ? m : this.mode);
+    }, 300);
   },
   mounted() {
     window.addEventListener('resize', this.refreshSizeAndMode);
-    this.refreshSizeAndMode(1);
+    const panel = this.$refs.wrapRef.querySelector('.panel');
+    this.observer = new MutationObserver(this.refreshSizeAndMode);
+    this.observer.observe(panel, { childList: true, subtree: true });
+    // this.refreshSizeAndMode(1);
   },
   beforeDestroy() {
+    this.observer && this.observer.disconnect();
     window.removeEventListener('resize', this.refreshSizeAndMode);
   },
 });
@@ -207,6 +212,15 @@ export default defineComponent({
 .panel-body {
   width: 100%;
   flex-grow: 1;
-  overflow: scroll;
+}
+
+.van-skeleton {
+  position: relative;
+  top: 20vw;
+}
+.van-skeleton__row,
+.van-skeleton__title {
+  height: 5vw;
+  background-color: #06c584;
 }
 </style>

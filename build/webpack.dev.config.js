@@ -1,25 +1,26 @@
-const webpack = require("webpack");
-const merge = require("webpack-merge");
-const baseWebpackConfig = require("./webpack.base.config");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin");
-const portfinder = require("portfinder");
+const webpack = require('webpack');
+const merge = require('webpack-merge');
+const baseWebpackConfig = require('./webpack.base.config');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
+const portfinder = require('portfinder');
+const { getIPAdress } = require('./utils');
 
 const devWebpackConfig = merge(baseWebpackConfig, {
-  mode: "development",
+  mode: 'development',
   devServer: {
-    clientLogLevel: "warning",
+    clientLogLevel: 'warning',
     historyApiFallback: {
-      rewrites: [{ from: /.*/, to: "/index.html" }],
+      rewrites: [{ from: /.*/, to: '/index.html' }],
     },
     hot: true,
     contentBase: false,
     compress: true,
-    host: process.env.HOST || "localhost",
+    host: process.env.HOST || 'localhost',
     port: +process.env.PORT || 8080,
     open: true, // 自动打开浏览器
     overlay: { warnings: false, errors: true }, // 展示全屏报错
-    publicPath: "/",
+    publicPath: '/',
     proxy: {},
     quiet: true, // for FriendlyErrorsPlugin
     watchOptions: {
@@ -32,13 +33,13 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         test: /\.(less|css)$/,
         use: [
           {
-            loader: "vue-style-loader",
+            loader: 'vue-style-loader',
           },
           {
-            loader: "css-loader",
+            loader: 'css-loader',
           },
           {
-            loader: "postcss-loader",
+            loader: 'postcss-loader',
             options: {
               plugins: [
                 require('autoprefixer')(),
@@ -50,24 +51,24 @@ const devWebpackConfig = merge(baseWebpackConfig, {
                   propList: ['*'],
                   selectorBlankList: ['ignore'], //指定不需要转换的类
                   minPixelValue: 1, //小于或等于‘1px’不转换为视口单位
-                  mediaQuery: false,//允许在媒体查询中转换为‘px’
-                  exclude:[/ycomponents/]  //不需要转化的组件文件名正则，必须是正则表达式
+                  mediaQuery: false, //允许在媒体查询中转换为‘px’
+                  exclude: [/ycomponents/], //不需要转化的组件文件名正则，必须是正则表达式
                 }),
               ],
             },
           },
           {
-            loader: "less-loader",
+            loader: 'less-loader',
           },
         ],
       },
     ],
   },
   // devtool: "cheap-module-eval-source-map",
-  devtool: "source-map",
+  devtool: 'source-map',
   plugins: [
     new webpack.DefinePlugin({
-      "process.env": {
+      'process.env': {
         NODE_ENV: '"development"',
       },
     }),
@@ -75,8 +76,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     new webpack.NamedModulesPlugin(), // 开启 HMR 的时候使用该插件会显示模块的相对路径
     new webpack.NoEmitOnErrorsPlugin(),
     new HtmlWebpackPlugin({
-      filename: "index.html",
-      template: "index.html",
+      filename: 'index.html',
+      template: 'index.html',
       inject: true,
     }),
   ],
@@ -88,16 +89,15 @@ module.exports = new Promise((resolve, reject) => {
     if (err) {
       reject(err);
     } else {
+      devWebpackConfig.devServer.host = getIPAdress();
       devWebpackConfig.devServer.port = port;
       devWebpackConfig.plugins.push(
         new FriendlyErrorsPlugin({
           compilationSuccessInfo: {
-            messages: [
-              `Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`,
-            ],
+            messages: [`App is running here: http://${devWebpackConfig.devServer.host}:${port}`],
           },
           onErrors: undefined,
-        })
+        }),
       );
 
       resolve(devWebpackConfig);

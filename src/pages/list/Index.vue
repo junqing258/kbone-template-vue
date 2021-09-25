@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="map"></div>
-    <Panel>
+    <Panel :loading="loaded === false">
       <div class="header" slot="header">
         <div class="notice" @click.prevent="onNoticeClick"></div>
-        <div class="car-types preset-scroll">
-          <ul>
+        <div class="car-types preset-scroll no-scrollbar">
+          <ul class="types-list">
             <li
               class="product-item"
               v-for="item in carTypes"
@@ -17,7 +17,7 @@
           </ul>
         </div>
       </div>
-      <div slot="body">
+      <div slot="body" class="products no-scrollbar">
         <ul>
           <li class="product-item" v-for="item in products" :key="item.id" @click.prevent="onCarClick(item.value)">
             {{ item.value }}
@@ -35,13 +35,14 @@
 <script lang="ts">
 import Panel from './components/Panel.vue';
 import { defineComponent } from '@vue/composition-api';
-import { useProductsInquiry } from './composable';
+import { useProductsInquiry } from './composable/useProductsInquiry';
 
 export default defineComponent({
   name: 'List',
   setup: () => {
     const { products, carTypes, switchSelectedCarType } = useProductsInquiry();
     return {
+      loaded: false,
       products,
       carTypes,
       switchSelectedCarType,
@@ -49,6 +50,13 @@ export default defineComponent({
   },
   components: {
     Panel,
+  },
+  watch: {
+    products(val) {
+      if (val) {
+        if (this.loaded === false) this.loaded = true;
+      }
+    },
   },
   methods: {
     onNoticeClick() {
@@ -84,8 +92,32 @@ export default defineComponent({
 </script>
 
 <style lang="less">
+.no-scrollbar {
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    background-color: transparent;
+    &-track-piece {
+      width: 0;
+      height: 0;
+      background-color: transparent;
+    }
+
+    &-thumb {
+      width: 0;
+      height: 0;
+      background-color: transparent;
+      cursor: pointer;
+      &:hover {
+        background-color: transparent;
+      }
+    }
+  }
+}
 .panel {
-  position: relative;
+  // position: relative;
   background: #f1f2f7;
   border-radius: 20px 20px 0 0;
   overflow: hidden;
@@ -99,7 +131,7 @@ export default defineComponent({
   width: 100%;
   height: 10vw;
   border-radius: 20px 20px 0 0;
-  background: turquoise;
+  background: #06c584;
   position: relative;
   &::after {
     content: ' ';
@@ -109,16 +141,16 @@ export default defineComponent({
     height: 5vw;
     bottom: -4vw;
     left: 0;
-    background: turquoise;
+    background: #06c584;
   }
 }
 
 .car-types {
   position: relative;
   width: 100vw;
-  height: 12vw;
   background: #f1f2f7;
   border-radius: 2.5vw 2.5vw 0 0;
+  padding: 0;
   overflow-x: scroll;
   > ul {
     width: fit-content;
@@ -128,6 +160,10 @@ export default defineComponent({
       width: 20vw;
     }
   }
+}
+.products {
+  overflow: scroll;
+  height: 100%;
 }
 
 .product-item {
@@ -159,5 +195,6 @@ export default defineComponent({
   background: rgb(6, 197, 132);
   color: #fff;
   margin: auto;
+  margin-top: 40px;
 }
 </style>
