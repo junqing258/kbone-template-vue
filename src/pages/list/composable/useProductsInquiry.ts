@@ -1,6 +1,6 @@
 import { reactive, readonly, toRefs, onMounted, onBeforeUnmount } from '@vue/composition-api';
 
-export default function useProductsInquiry() {
+export function useProductsInquiry() {
   const state = reactive({
     products: [],
     carTypes: [],

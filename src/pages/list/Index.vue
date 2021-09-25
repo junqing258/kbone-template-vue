@@ -30,19 +30,20 @@
 <script lang="ts">
 import Panel from './components/Panel.vue';
 import { defineComponent, ref } from '@vue/composition-api';
-import useProductsInquiry from './composable/useProductsInquiry';
-import useOnScroll from './composable/useOnScroll';
+import { useProductsInquiry } from './composable/useProductsInquiry';
+import { useOnScroll } from 'vue-composable';
 
 export default defineComponent({
   name: 'List',
   setup: () => {
     const { products, carTypes, switchSelectedCarType } = useProductsInquiry();
-    const scrollRef = ref<HTMLElement | null>(null);
-    const { scrollY } = useOnScroll(scrollRef);
-    console.log('=================', scrollY);
+    const scrollRef = ref(null);
+    const { scrollTop } = useOnScroll(scrollRef);
 
     return {
+      scrollRef,
       loaded: false,
+      scrollTop,
       products,
       carTypes,
       switchSelectedCarType,
@@ -52,6 +53,9 @@ export default defineComponent({
     Panel,
   },
   watch: {
+    scrollTop(val) {
+      console.log('========== scrollTop ==========', val);
+    },
     products(val) {
       if (val) {
         if (this.loaded === false) this.loaded = true;
