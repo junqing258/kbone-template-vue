@@ -21,8 +21,7 @@ export const useProductsInquiry = () => {
 
   let timer;
   onMounted(() => {
-    actions.refreshCarList();
-    timer = setInterval(actions.refreshCarList, 1000);
+    timer = setInterval(actions.refreshCarList, 3000);
   });
 
   onBeforeUnmount(() => {
@@ -30,7 +29,7 @@ export const useProductsInquiry = () => {
   });
 
   return {
-    ...toRefs(state),
+    ...toRefs(readonly(state)),
     ...actions,
   };
 };
