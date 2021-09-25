@@ -24,6 +24,7 @@
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
 import { debounce } from '@/utils/util';
+import { useScroll } from '@vueuse/core';
 
 export default defineComponent({
   name: 'DrawerPanel',
